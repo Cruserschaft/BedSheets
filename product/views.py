@@ -1,50 +1,46 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 
 
 def start_product(request):
-    category = ProductType.objects.filter(title_extra=None, access=True)
+    category = ProductType.objects.filter(access=True)
     products = Product.objects.filter(access=True)
+    paginator = Paginator(products, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, 'product.html',
                   context={
                       "category": category,
-                      "products": products,
+                      "products": page_obj,
                   })
 
 
 def product_slug(request, post_slug):
-    category = ProductType.objects.filter(title_extra=None, access=True)
-    category_type = ProductType.objects.filter(access=True, slug__startswith=post_slug).exclude(slug__iexact=post_slug)
+    category = ProductType.objects.filter(access=True)
     products = Product.objects.filter(product_type__slug=post_slug)
-    print(products)
+    title = products.first().product_type.title
+
+    paginator = Paginator(products, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'product.html',
                   context={
                       "category": category,
-                      "products": products,
-                      "category_type": category_type,
-                  })
-
-
-def product_type_slug(request, post_slug, post_type_slug):
-    category = ProductType.objects.filter(title_extra=None, access=True)
-    category_type = ProductType.objects.filter(access=True, slug__startswith=post_slug).exclude(slug__iexact=post_slug)
-    products = Product.objects.filter(product_type__slug=post_type_slug)
-    print(products)
-    return render(request, 'product.html',
-                  context={
-                      "category": category,
-                      "products": products,
-                      "category_type": category_type,
+                      "products": page_obj,
+                      "title": title,
                   })
 
 
 def item_page(request, item_slug):
-    item = Product.objects.filter(access=True, slug=item_slug)[0]
-    item_type = item.product_type.filter(title_extra__isnull=False)
-
+    item = get_object_or_404(Product, access=True, slug=item_slug)
+    item_types = ProductSubtype.objects.filter(access=True, parent__slug=item_slug)
     return render(request, 'single-product.html',
                   context={
                       "prod_item": item,
-                      "prod_item_type": item_type,
+                      "item_types": item_types,
                   })
+
+#

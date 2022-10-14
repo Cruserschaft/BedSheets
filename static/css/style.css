@@ -564,11 +564,13 @@ ul {
   }
 }
 
+
+
 /* line 44, /Applications/MAMP/htdocs/old/palash/cl/shop_html/sass/_button.scss */
 .btn_3 {
   display: inline-block;
   padding: 18px 36px;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: transparent;
   border: 1px solid #B08EAD;
   font-size: 15px;
@@ -580,6 +582,26 @@ ul {
   transition: 0.5s;
 }
 
+.btn_3_mini {
+  width: 100px;
+  text-align: center;
+  padding: 8px 15px;
+  font-size: 10px;
+}
+
+.btn_3_mini_2 {
+  padding: 12px 12px;
+  font-size: 10px;
+}
+
+.btn_3_custom {
+  width: 500px;
+  font-size: 20px;
+}
+
+.btn_3_page {
+  background-color: #B08EAD;
+}
 /* line 56, /Applications/MAMP/htdocs/old/palash/cl/shop_html/sass/_button.scss */
 .btn_3:hover {
   background-color: #B08EAD;

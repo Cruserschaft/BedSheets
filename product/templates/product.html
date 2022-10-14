@@ -1,5 +1,12 @@
 {% extends 'index.html' %}
 {% load static %}
+
+
+{% block title %}
+    Товари
+{% endblock %}
+
+
 {% block main_content %}
     <!-- breadcrumb part start-->
     <section class="breadcrumb_part">
@@ -7,7 +14,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb_iner">
+                        {% if title %}
+                        <h2>Товари > {{ title }}</h2>
+                        {% else %}
                         <h2>Товари</h2>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -60,17 +71,22 @@
                             <div class="col-lg-6 col-sm-6">
                                 <div class="single_product_item">
                                     <img src="{% get_media_prefix %}{{ item.image }}" alt="#" class="img-fluid" style="height: 300px">
-                                    <h3> <a href="{{ item.slug }}">{{ item.about }}</a> </h3>
-                                    <p>Від {{ item.cost }}</p>
+                                    <h3> <a href="{% url 'product_item' item.slug %}">{{ item.title|safe }}</a> </h3>
                                     <a href="{% url 'product_item' item.slug %}" class="btn_3">Переглянути</a>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                     <div class="load_more_btn text-center">
-                    <a href="#" class="btn_3">1</a>
-                    <a href="#" class="btn_3">2</a>
-                    <a href="#" class="btn_3">3</a>
+                    {% if  products.has_other_pages %}
+                    {% for p in products.paginator.page_range %}
+                    {% if products.number == p %}
+                        <a class="btn_3 btn_3_page">{{ p }}</a>
+                    {% elif p >= products.number|add:-2 and p <= products.number|add:2 %}
+                        <a href="?page={{ p }}" class="btn_3">{{ p }}</a>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                     </div>
                 </div>
             </div>
