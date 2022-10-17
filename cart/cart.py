@@ -79,7 +79,7 @@ class Cart:
                 res_extra += (item['product'].parent.extra2.cost * item['quantity'])
             if "extra3" in item:
                 res_extra += (item['product'].parent.extra3.cost * item['quantity'])
-        return {"all": res_all+res_extra, "extra": res_extra}
+        return {"all": res_all+res_extra, "extra": res_extra, "products": res_all}
 
     def save(self):
         self.session.modified = True
