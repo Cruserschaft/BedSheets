@@ -15,6 +15,18 @@ class PostType(models.Model):
 
 
 class Order(models.Model):
+    order_open = "open"
+    order_verify = "verify"
+    order_sent = "sent"
+    order_completed = "completed"
+
+    ORDER_CHOICES = [
+        (order_open, "На огляді"),
+        (order_verify, "Перевірений"),
+        (order_sent, "Відправлено"),
+        (order_completed, "Завершено"),
+    ]
+
     first_name = models.CharField(max_length=50, verbose_name="Ім'я")
     last_name = models.CharField(max_length=50, verbose_name="Ім'я")
     phone = models.CharField(max_length=13, verbose_name="Ім'я")
@@ -23,8 +35,9 @@ class Order(models.Model):
     address = models.CharField(max_length=50, verbose_name="Ім'я")
     post = models.ForeignKey(PostType, on_delete=models.PROTECT, verbose_name="Доставка", related_name="+")
     post_code = models.CharField(max_length=5)
-    commentary = models.TextField(verbose_name="Коментарій")
+    commentary = models.TextField(verbose_name="Коментарій", blank=True)
     order = models.TextField(verbose_name="Замовлення", default="", blank=True)
+    status = models.CharField(max_length=10, choices=ORDER_CHOICES, default=order_open, verbose_name="Статус замовлення", blank=True)
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата і час створення")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата і час оновлення")
 

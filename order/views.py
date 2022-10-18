@@ -13,9 +13,10 @@ def start_order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             print("Все вірно")
-            # form.order = request.session.get(CART_SESSION_ID) # Додати в order в моделі
+            # request.session.get(CART_SESSION_ID)
             form_update = form.save(commit=True)
-            print(form_update)
+            form_update.order = request.session.get(CART_SESSION_ID)
+
             form_update.save()
             form = OrderForm()
         else:
