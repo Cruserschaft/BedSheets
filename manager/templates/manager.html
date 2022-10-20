@@ -29,7 +29,6 @@
 
 
 
-
                         {% for item in person %}
                         <article class="blog_item" style="border: solid; border-color: #B08EAD">
                             <div class="blog_item_img">
@@ -40,7 +39,7 @@
 
                             <div class="blog_details">
                                 <a class="d-inline-block" href="{% url 'manager_order' item.pk %}">
-                                    <h2>{{ item.first_name }}, {{ item.last_name }}</h2>
+                                    <h2>№{{ item.pk }}. {{ item.first_name }}, {{ item.last_name }}</h2>
                                 </a>
                                 <p>{% for thing in item.order %}
                                     {% with thing.product as product %}
@@ -56,38 +55,64 @@
                         {% endfor %}
 
 
+
+
+
+
+
+
                         <nav class="blog-pagination justify-content-center d-flex">
                             <ul class="pagination">
-                                <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Previous">
+
+                                {% if person.has_other_pages %}
+                                <li class="page-item" style="margin-right: 30px">
+                                    <a href="?page=1" class="page-link">
                                         <i class="ti-angle-left"></i>
                                     </a>
                                 </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">1</a>
+                                {% for p in person.paginator.page_range %}
+                                {% if person.number == p %}
+                                <p class="page-link" style="background-color: rgba(176,142,173,0.52);">{{ p }}</p>
+                                {% elif p >= person.number|add:-3 and p <= person.number|add:3 %}
+                                <li class="page-num">
+                                    <a href="?page={{ p }}" class="page-link">{{ p }}</a>
                                 </li>
-                                <li class="page-item active">
-                                    <a href="#" class="page-link">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Next">
+                                {% endif %}
+                                {% endfor %}
+                                <li class="page-item" style="margin-left: 30px">
+                                    <a href="?page=999" class="page-link">
                                         <i class="ti-angle-right"></i>
                                     </a>
                                 </li>
+                                {% endif %}
+
+
+
+
+
+
+
+
                             </ul>
                         </nav>
                     </div>
                 </div>
 
+
+
+
+
+
+
+
                 <div class="col-lg-4">
                     <div class="blog_right_sidebar">
                         <aside class="single_sidebar_widget search_widget">
-                            <form action="#">
+                            <form action="{% url 'manager_start' %}" method="post">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder='Шукати замовлення'
-                                            onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = 'Шукати замовлення'">
+                                        {{ form.search }}
                                         <div class="input-group-append">
                                             <button class="btn" type="button"><i class="ti-search"></i></button>
                                         </div>
@@ -108,22 +133,22 @@
                                 </li>
 
                                 <li>
-                                    <a href="{% url 'manager_sort' person.first.order_open %}" class="d-flex">
+                                    <a href="{% url 'manager_sort' person.0.order_open %}" class="d-flex">
                                         <p>На огляді</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'manager_sort' person.first.order_verify %}" class="d-flex">
+                                    <a href="{% url 'manager_sort' person.0.order_verify %}" class="d-flex">
                                         <p>Перевірено</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'manager_sort' person.first.order_sent %}" class="d-flex">
+                                    <a href="{% url 'manager_sort' person.0.order_sent %}" class="d-flex">
                                         <p>Відправлено</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'manager_sort' person.first.order_completed %}" class="d-flex">
+                                    <a href="{% url 'manager_sort' person.0.order_completed %}" class="d-flex">
                                         <p>Завершено</p>
                                     </a>
                                 </li>

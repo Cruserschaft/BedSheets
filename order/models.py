@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 class PostType(models.Model):
@@ -26,7 +27,7 @@ class Order(models.Model):
         (order_sent, "Відправлено"),
         (order_completed, "Завершено"),
     ]
-
+    person_uuid = models.UUIDField(default=uuid.uuid4, verbose_name="Код заказу", blank=True)
     first_name = models.CharField(max_length=50, verbose_name="Ім'я")
     last_name = models.CharField(max_length=50, verbose_name="Ім'я")
     phone = models.CharField(max_length=13, verbose_name="Ім'я")
